@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>notation</title>
+	<script src="../static/vexflow-min.js"></script>
+	<script src="../static/jquery.js"></script>
+	<script src="../static/raphael.js"></script>
+	<script src="../static/underscore-min.js"></script>
+	<script src="../static/vexflow-json.js"></script>
+	<link href="../static/bootstrap.min.css" rel='stylesheet' type='text/css' media="screen">
+	<script src="../static/bootstrap.min.js"></script>
+</head>
+
+<body>
+<div class="container-fluid">
+<div class="row-fluid">
+<div class="span2">
+	<textarea rows="10" id="voice"></textarea>
+</div>
+
+<div class="span10">
+<canvas id="test"  width=700 height=100"></canvas>
+</div>
+</div>
+
+
+<script>
+$('#voice').bind('input propertychange', function() {
+	$.post('parse', {rawinput: $('#voice').val()}, function(data) {
+		console.log(data);
+		var json = new Vex.Flow.JSON(data);
+		var canvas = document.getElementById('test');
+		var invisi = document.createElement("canvas");
+		invisi.width = canvas.width;
+		invisi.height = canvas.height;
+		try {
+			json.render(invisi);
+		}
+		catch(err) {
+			console.log(err);
+			return 0;
+		}
+		var json = new Vex.Flow.JSON(data);
+		canvas.width = canvas.width;
+		json.render(canvas);
+	});
+});
+</script>
+</body>
